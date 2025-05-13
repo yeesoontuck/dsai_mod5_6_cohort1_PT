@@ -1,6 +1,15 @@
 # gemini
 
 from flask import Flask, request, render_template
+import google.generativeai as genai
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+gemini_api_key = os.environ.get('GEMINI_API_KEY')
+
+genai.configure(api_key=gemini_api_key)
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 app = Flask(__name__)
 
@@ -16,8 +25,8 @@ def gemini():
 def gemini_reply():
     q = request.form.get("q")
 
-    r=q
-    return render_template("gemini_reply.html", r=r)
+    r = model.generate_content(q)
+    return render_template("gemini_reply.html", r=r.text)
 
 if __name__ == "__main__":
     app.run()
