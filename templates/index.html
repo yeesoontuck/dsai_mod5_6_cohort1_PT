@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chat</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Gemini Chat</h1>
+        <form action="/" method="post">
+            <p>Please enter your question : </p>
+            <p><input type="text" name="txt"></p>
+            <p><input type="submit" value="Enter"></p>
+        </form>
+        <p>The reply is {{result}}</p>
+    </div>
+</html>
+</body>
+</html>
