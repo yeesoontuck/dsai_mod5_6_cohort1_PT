@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <h6 id="chat_response">Reply {{ r|safe }}</h6>
-        <form action="/" method="post">
+        <form action="{{ url_for('index') }}" method="post">
             <input type="submit" value="Main">
         </form>
     </div>

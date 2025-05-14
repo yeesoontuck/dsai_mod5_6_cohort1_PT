@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <h2>Web Application</h2>
-        <form action="/gemini" method="post">
+        <form action="{{ url_for('gemini') }}" method="post">
             <input type="submit" value="Chatbot by Gemini">
         </form>
     </div>
