@@ -18,7 +18,7 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-@app.route('/gemini', methods=["POST"])
+@app.route('/gemini', methods=["GET", "POST"])
 def gemini():
     return render_template("gemini.html")
 
@@ -33,9 +33,16 @@ def gemini_reply():
 
     return render_template("gemini_reply.html", r=formatted_response)
 
+
+
+
 @app.route('/experimental', methods=['GET'])
 def experimental():
-    return render_template('experimental/index.html')
+    return render_template('experimental/gemini_text.html')
+
+
+
+
 
 if __name__ == "__main__":
     app.run()

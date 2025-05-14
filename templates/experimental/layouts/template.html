@@ -9,6 +9,12 @@
     {% endblock %}
 </head>
 <body>
-    {% block content %}{% endblock %}
+    <div class="flex h-screen">
+        {% include "experimental/layouts/sidebar.html" %}
+
+        <div class="m-4">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
 </body>
 </html>
