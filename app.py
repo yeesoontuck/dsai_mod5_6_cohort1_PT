@@ -33,5 +33,9 @@ def gemini_reply():
 
     return render_template("gemini_reply.html", r=formatted_response)
 
+@app.route('/experimental', methods=['GET'])
+def experimental():
+    return render_template('experimental/index.html')
+
 if __name__ == "__main__":
     app.run()
