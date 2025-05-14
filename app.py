@@ -2,6 +2,7 @@
 
 from flask import Flask, request, render_template
 import google.generativeai as genai
+from markdown2 import Markdown
 from dotenv import load_dotenv
 import os
 
@@ -26,7 +27,11 @@ def gemini_reply():
     q = request.form.get("q")
 
     r = model.generate_content(q)
-    return render_template("gemini_reply.html", r=r.text)
+
+    markdowner = Markdown()
+    formatted_response = markdowner.convert(r.text)
+
+    return render_template("gemini_reply.html", r=formatted_response)
 
 if __name__ == "__main__":
     app.run()

@@ -94,3 +94,7 @@ p {
         font-size: 16px;
     }
 }
+
+#chat_response {
+    text-align: left;
+}
