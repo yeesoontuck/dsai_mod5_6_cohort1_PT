@@ -38,7 +38,7 @@ def gemini_reply():
 def experimental():
     return render_template('experimental/gemini_text.html')
 
-@app.route('/experimentalgemini_text', methods=['POST'])
+@app.route('/experimental/gemini_text', methods=['POST'])
 def gemini_text():
 
     gemini_text_model = request.form.get("model")
