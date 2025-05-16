@@ -3,3 +3,5 @@ gunicorn
 google-generativeai
 python-dotenv
 markdown2
+pillow
+google-genai

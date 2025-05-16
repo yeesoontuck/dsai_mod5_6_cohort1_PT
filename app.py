@@ -4,6 +4,12 @@ from markdown2 import Markdown
 from dotenv import load_dotenv
 import os
 
+from google import genai as genai_new
+from google.genai import types
+from PIL import Image
+from io import BytesIO
+import random
+
 load_dotenv()
 gemini_api_key = os.getenv('GEMINI_API_KEY')
 
@@ -54,6 +60,35 @@ def gemini_text():
     return render_template('experimental/gemini_text.html', q=q, r=formatted_response, model=gemini_text_model)
 
 
+@app.route('/experimental/gemini_image', methods=['GET'])
+def gemini_image():
+    return render_template('experimental/gemini_image.html')
+
+@app.route('/experimental/gemini_image/output', methods=['POST'])
+def gemini_image_output():
+    client = genai_new.Client(api_key=gemini_api_key)
+
+    contents = request.form.get('prompt')
+
+    response = client.models.generate_content(
+        model="gemini-2.0-flash-preview-image-generation",
+        contents=contents,
+        config=types.GenerateContentConfig(
+        response_modalities=['TEXT', 'IMAGE']
+        )
+    )
+
+    for part in response.candidates[0].content.parts:
+        if part.inline_data is not None:
+            image = Image.open(BytesIO((part.inline_data.data)))
+            
+            number = random.randint(0, 999999)
+            filename = f"image{number:06d}.png"
+            filepath = f'./static/{filename}'
+            image.save(filepath)
+            # image.show()
+
+    return render_template('experimental/gemini_image.html', prompt=contents, image=filename)
 
 if __name__ == "__main__":
     app.run()
