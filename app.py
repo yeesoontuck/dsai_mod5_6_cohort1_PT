@@ -1,5 +1,3 @@
-# gemini
-
 from flask import Flask, request, render_template
 import google.generativeai as genai
 from markdown2 import Markdown
@@ -7,7 +5,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-gemini_api_key = os.environ.get('GEMINI_API_KEY')
+gemini_api_key = os.getenv('GEMINI_API_KEY')
 
 genai.configure(api_key=gemini_api_key)
 model = genai.GenerativeModel("gemini-2.0-flash")
@@ -40,7 +38,20 @@ def gemini_reply():
 def experimental():
     return render_template('experimental/gemini_text.html')
 
+@app.route('/experimentalgemini_text', methods=['POST'])
+def gemini_text():
 
+    gemini_text_model = request.form.get("model")
+    genai.GenerativeModel(gemini_text_model)
+
+    q = request.form.get("q")
+
+    r = model.generate_content(q)
+
+    markdowner = Markdown()
+    formatted_response = markdowner.convert(r.text)
+    
+    return render_template('experimental/gemini_text.html', q=q, r=formatted_response, model=gemini_text_model)
 
 
 

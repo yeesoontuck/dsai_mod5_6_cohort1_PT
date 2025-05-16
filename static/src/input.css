@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
+@source "../../node_modules/flowbite";
+
+ol {
+    @apply list-inside list-decimal;
+}
+
+strong {
+    @apply font-bold;
+}
+
+em {
+    @apply italic;
+}

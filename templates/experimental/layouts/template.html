@@ -9,12 +9,13 @@
     {% endblock %}
 </head>
 <body>
-    <div class="flex h-screen">
-        {% include "experimental/layouts/sidebar.html" %}
+    {% include "experimental/layouts/navbar.html" %}
+    {% include "experimental/layouts/sidebar.html" %}
 
-        <div class="m-4">
-            {% block content %}{% endblock %}
-        </div>
-    </div>
+    <main class="p-4 md:ml-64 h-auto pt-20">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
 </html>
