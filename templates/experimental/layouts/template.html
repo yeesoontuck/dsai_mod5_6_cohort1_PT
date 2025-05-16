@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/output.css') }}">
     {% endblock %}
 </head>
-<body>
+<body class="bg-white dark:bg-gray-600">
     {% include "experimental/layouts/navbar.html" %}
     {% include "experimental/layouts/sidebar.html" %}
 
-    <main class="p-4 md:ml-64 h-auto pt-20">
+    <main class="bg-white dark:bg-gray-600 p-4 md:ml-64 h-auto pt-20">
         {% block content %}{% endblock %}
     </main>
 

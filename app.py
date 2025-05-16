@@ -74,7 +74,7 @@ def gemini_image_output():
         model="gemini-2.0-flash-preview-image-generation",
         contents=contents,
         config=types.GenerateContentConfig(
-        response_modalities=['TEXT', 'IMAGE']
+            response_modalities=['TEXT', 'IMAGE']
         )
     )
 
