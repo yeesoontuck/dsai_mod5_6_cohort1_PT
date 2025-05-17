@@ -8,7 +8,8 @@ from google import genai as genai_new
 from google.genai import types
 from PIL import Image
 from io import BytesIO
-import random
+# import random
+import time
 
 load_dotenv()
 gemini_api_key = os.getenv('GEMINI_API_KEY')
@@ -82,8 +83,8 @@ def gemini_image_output():
         if part.inline_data is not None:
             image = Image.open(BytesIO((part.inline_data.data)))
             
-            number = random.randint(0, 999999)
-            filename = f"image{number:06d}.png"
+            # number = random.randint(0, 999999)
+            filename = f"image_{time.time()}.png"
             filepath = f'./static/{filename}'
             image.save(filepath)
             # image.show()
