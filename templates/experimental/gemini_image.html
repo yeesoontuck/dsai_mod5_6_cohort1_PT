@@ -19,7 +19,7 @@
         {% if image %}
         <div id="response" class="mt-5">
             <img src="{{ url_for('static', filename=image) }}">
-            AI-generated image of {{ prompt }}
+            <p class="text-gray-800 dark:text-gray-100">AI-generated image of {{ prompt }}</p>
         </div>
         {% endif %}
     </div>
