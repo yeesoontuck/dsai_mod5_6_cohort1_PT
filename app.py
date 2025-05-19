@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 import google.generativeai as genai
 from markdown2 import Markdown
 from dotenv import load_dotenv
@@ -13,6 +13,8 @@ from io import BytesIO
 import time
 import requests
 from datetime import datetime
+
+import sqlite3
 
 # Gemini Telegram chat
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
@@ -30,6 +32,10 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
+@app.route("/main", methods=["GET", "POST"])
+def main():
+    return render_template("main.html")
+
 @app.route('/gemini', methods=["GET", "POST"])
 def gemini():
     return render_template("gemini.html")
@@ -45,7 +51,43 @@ def gemini_reply():
 
     return render_template("gemini_reply.html", r=formatted_response)
 
+@app.route('/sql', methods=['POST'])
+def sql():
+    # insert the name into database
+    username = request.form.get('username')
+    t = datetime.now()
 
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute('INSERT INTO users (name, timestamp) VALUES(?,?)', (username, t))
+    conn.commit()
+    c.close()
+    conn.close()
+
+    return redirect(url_for('users'))
+
+
+@app.route('/users', methods=['GET', 'POST'])
+def users():
+    # read all users
+    conn = sqlite3.connect('user.db')
+    conn.row_factory = sqlite3.Row  # so we can use column names
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users order by timestamp')
+    rows = cursor.fetchall()
+    conn.close()
+    return render_template('users.html', users=rows)
+
+@app.route('/delete_users', methods=['POST'])
+def delete_users():
+    # delete all rows
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute('DELETE FROM users')
+    conn.commit()
+    c.close()
+    conn.close()
+    return redirect(url_for('users'))
 
 
 @app.route('/experimental/gemini_text', methods=['GET'])
