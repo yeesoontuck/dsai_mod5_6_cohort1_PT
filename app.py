@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, Response, render_template
 import google.generativeai as genai
 from markdown2 import Markdown
 from dotenv import load_dotenv
@@ -49,16 +49,30 @@ def experimental():
 def gemini_text():
 
     gemini_text_model = request.form.get("model")
-    genai.GenerativeModel(gemini_text_model)
+    gemini_model = genai.GenerativeModel(gemini_text_model)
 
     q = request.form.get("q")
 
-    r = model.generate_content(q)
+    def generate():
+        try:
+            response = gemini_model.generate_content(q, stream=True)
+            # markdowner = Markdown(['nl2br'])
+            for chunk in response:
+                # formatted_chunk = markdowner.convert(chunk.text)
+                text = chunk.text
+                formatted_chunk = text.replace("\n", "<br>")
+                yield f"{formatted_chunk}"
+        except Exception as e:
+            yield f"data: Error: {str(e)}\n\n"
 
-    markdowner = Markdown()
-    formatted_response = markdowner.convert(r.text)
+    return Response(generate(), mimetype='text/html')
+
+
+    # r = gemini_model.generate_content(q, stream=True)
+    # markdowner = Markdown()
+    # formatted_response = markdowner.convert(r.text)
     
-    return render_template('experimental/gemini_text.html', q=q, r=formatted_response, model=gemini_text_model)
+    # return render_template('experimental/gemini_text.html', q=q, r=formatted_response, model=gemini_text_model)
 
 
 @app.route('/experimental/gemini_image', methods=['GET'])
