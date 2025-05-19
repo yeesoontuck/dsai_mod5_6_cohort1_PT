@@ -74,7 +74,7 @@ def gemini_image():
 
 @app.route('/experimental/gemini_image/output', methods=['POST'])
 def gemini_image_output():
-    client = genai_new.Client(api_key=gemini_api_key)
+    client = genai_new.Client(api_key=GEMINI_API_KEY)
 
     contents = request.form.get('prompt')
 
