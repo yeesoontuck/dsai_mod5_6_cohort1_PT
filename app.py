@@ -21,6 +21,9 @@ client = genai_new.Client(api_key=GEMINI_API_KEY)
 url = f'https://api.telegram.org/bot{TELEGRAM_API_KEY}/'
 
 
+genai.configure(api_key=gemini_api_key)
+model = genai.GenerativeModel("gemini-2.0-flash")
+
 app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
