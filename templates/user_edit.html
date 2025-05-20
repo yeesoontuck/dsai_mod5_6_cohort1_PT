@@ -10,20 +10,17 @@
 <body>
     <div class="container">
         <h2>Web Application</h2>
-        <form action="{{ url_for('gemini') }}" method="post">
-            <input type="submit" value="Chatbot by Gemini">
+        <form action="{{ url_for('update') }}" method="post">
+            <p>Edit username:</p>
+            <input type="hidden" name="orig_name" value="{{ user.name }}">
+            <input type="hidden" name="orig_timestamp" value="{{ user.timestamp }}">
+            
+            <input type="text" name="username" value="{{ user.name }}">
+            <input type="submit" value="Save">
         </form>
 
         <form action="{{ url_for('users') }}" method="post">
-            <input type="submit" value="Users">
-        </form>
-
-        <form action="{{ url_for('delete_users') }}" method="post">
-            <input type="submit" value="Delete Users">
-        </form>
-
-        <form action="{{ url_for('index') }}" method="post">
-            <input type="submit" value="Index">
+            <input type="submit" value="Cancel">
         </form>
     </div>
 </html>

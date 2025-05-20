@@ -38,7 +38,7 @@ def main():
 
 @app.route('/gemini', methods=["GET", "POST"])
 def gemini():
-    return render_template("gemini.html")
+    return render_template("gemini.html.j2")
 
 @app.route('/gemini_reply', methods=["POST"])
 def gemini_reply():
@@ -87,6 +87,37 @@ def delete_users():
     conn.commit()
     c.close()
     conn.close()
+    return redirect(url_for('users'))
+
+@app.route('/edit', methods=['POST'])
+def edit():
+    name = request.form.get('name')
+    timestamp = request.form.get('timestamp')
+
+    # find user in DB
+    conn = sqlite3.connect('user.db')
+    conn.row_factory = sqlite3.Row  # so we can use column names
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users where name = ? and timestamp = ? limit 1', (name, timestamp))
+    row = cursor.fetchone()
+    conn.close()
+    return render_template('user_edit.html', user=row)
+
+@app.route('/update', methods=['POST'])
+def update():
+    # save changes
+    orig_name = request.form.get('orig_name')
+    orig_timestamp = request.form.get('orig_timestamp')
+    username = request.form.get('username')
+    t = datetime.now()
+
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute('UPDATE users SET name = ?, timestamp = ? where name = ? and timestamp = ?', (username, t, orig_name, orig_timestamp))
+    conn.commit()
+    c.close()
+    conn.close()
+
     return redirect(url_for('users'))
 
 

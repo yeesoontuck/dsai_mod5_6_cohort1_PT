@@ -13,11 +13,12 @@
                 <tr>
                     <th>Name</th>
                     <th>Timestamp</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% if not users %}
-                <tr><td colspan="2" style="text-align: center;">No users in database</td></tr>
+                <tr><td colspan="3" style="text-align: center;">No users in database</td></tr>
                 {% endif %}
 
                 {% for user in users %}
@@ -27,6 +28,13 @@
                     </td>
                     <td>
                         {{ user.timestamp }}
+                    </td>
+                    <td>
+                        <form class="inline" action="{{ url_for('edit') }}" method="post">
+                            <input type="hidden" name="name" value="{{ user.name }}">
+                            <input type="hidden" name="timestamp" value="{{ user.timestamp }}">
+                            <input class="edit-btn" type="submit" value="Edit">
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}
