@@ -77,6 +77,19 @@ input[type="submit"].edit-btn {
     max-width: 10rem;
 }
 
+input[type="submit"].delete-btn {
+    background-color: #c72727;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 10rem;
+    max-width: 10rem;
+}
+
 input, button {
     width: 100%;
     padding: 10px;

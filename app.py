@@ -121,6 +121,23 @@ def update():
     return redirect(url_for('users'))
 
 
+@app.route('/delete', methods=['POST'])
+def delete():
+    # delete user
+    name = request.form.get('name')
+    timestamp = request.form.get('timestamp')
+
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute('DELETE FROM users where name = ? and timestamp = ?', (name, timestamp))
+    conn.commit()
+    c.close()
+    conn.close()
+
+    return redirect(url_for('users'))
+
+
+
 @app.route('/experimental/gemini_text', methods=['GET'])
 def experimental():
     return render_template('experimental/gemini_text.html')

@@ -29,11 +29,16 @@
                     <td>
                         {{ user.timestamp }}
                     </td>
-                    <td>
+                    <td style="display:flex; gap: 2rem;">
                         <form class="inline" action="{{ url_for('edit') }}" method="post">
                             <input type="hidden" name="name" value="{{ user.name }}">
                             <input type="hidden" name="timestamp" value="{{ user.timestamp }}">
                             <input class="edit-btn" type="submit" value="Edit">
+                        </form>
+                        <form class="inline" action="{{ url_for('delete') }}" method="post">
+                            <input type="hidden" name="name" value="{{ user.name }}">
+                            <input type="hidden" name="timestamp" value="{{ user.timestamp }}">
+                            <input class="delete-btn" type="submit" value="Delete">
                         </form>
                     </td>
                 </tr>
