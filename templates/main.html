@@ -25,7 +25,18 @@
         <form action="{{ url_for('index') }}" method="post">
             <input type="submit" value="Index">
         </form>
+
+        <form action="{{ url_for('paynow') }}" method="post">
+            <input type="submit" value="Transfer money" style="background-color: #109849;">
+        </form>
+
+        <form action="{{ url_for('telegram') }}" method="post">
+            <input type="submit" value="Start Telegram" style="background-color: #109849;">
+        </form>
+
+        <form action="{{ url_for('prediction') }}" method="post">
+            <input type="submit" value="Prediction" style="background-color: #109849;">
+        </form>
     </div>
-</html>
 </body>
 </html>

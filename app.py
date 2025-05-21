@@ -226,6 +226,19 @@ def telegram_webhook():
         return 'OK', 200
 
 
+@app.route('/paynow', methods=['GET', 'POST'])
+def paynow():
+    return render_template('paynow.html')
+
+
+@app.route('/telegram', methods=['GET', 'POST'])
+def telegram():
+    return 'ok'
+
+@app.route('/prediction', methods=['GET', 'POST'])
+def prediction():
+    return 'ok'
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
     # app.run()

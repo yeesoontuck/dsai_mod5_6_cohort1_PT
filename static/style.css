@@ -167,3 +167,11 @@ th {
   color: white;
   text-transform: uppercase;
 }
+
+.field-row {
+    margin: 2rem 0;
+}
+
+label {
+    text-align: left !important;
+}
