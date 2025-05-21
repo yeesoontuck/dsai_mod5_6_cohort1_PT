@@ -230,6 +230,9 @@ def telegram_webhook():
 def paynow():
     return render_template('paynow.html')
 
+@app.route('/dsai_token', methods=['GET', 'POST'])
+def dsai_token():
+    return render_template('dsai_erc20.html')
 
 @app.route('/telegram', methods=['GET', 'POST'])
 def telegram():
