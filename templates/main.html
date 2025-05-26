@@ -34,15 +34,13 @@
             <input type="submit" value="DSAI ERC20 Token" style="background-color: #109849;">
         </form>
 
-        <form action="{{ url_for('telegram') }}" method="post">
-            <input type="submit" value="Start Telegram" style="background-color: #109849;">
-        </form>
-
         <form action="{{ url_for('prediction') }}" method="post">
             <input type="submit" value="Prediction" style="background-color: #109849;">
         </form>
 
-        <a href="http://t.me/webhook_yst_bot" target="_blank">Telegram bot (Webhook version)</a>
+        <form action="http://t.me/webhook_yst_bot" method="get">
+            <input type="submit" value="Telegram bot (Webhook version)">
+        </form>
     </div>
 </body>
 </html>
