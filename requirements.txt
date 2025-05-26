@@ -6,3 +6,4 @@ markdown2
 pillow
 google-genai
 pysqlite3
+openai

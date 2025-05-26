@@ -15,10 +15,12 @@ import requests
 from datetime import datetime
 
 import sqlite3
+from openai import OpenAI
 
 # Gemini Telegram chat
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 TELEGRAM_API_KEY = os.getenv('TELEGRAM_API_KEY')
+TELEGRAM_SEALION_API_KEY = os.getenv('TELEGRAM_SEALION_API_KEY')
 client = genai_new.Client(api_key=GEMINI_API_KEY)
 url = f'https://api.telegram.org/bot{TELEGRAM_API_KEY}/'
 
@@ -138,6 +140,10 @@ def delete():
 
 
 
+@app.route('/experimental', methods=['GET'])
+def experimental_alias():
+    return redirect(url_for('experimental'))
+
 @app.route('/experimental/gemini_text', methods=['GET'])
 def experimental():
     return render_template('experimental/gemini_text.html')
@@ -225,6 +231,58 @@ def telegram_webhook():
 
         return 'OK', 200
 
+@app.route('/experimental/telegram_sealion/webhook', methods=['POST'])
+def telegram_sealion_webhook():
+
+    # available Sea-lion models
+    # "aisingapore/Llama-SEA-LION-v3.5-8B-R"
+    # "aisingapore/Gemma-SEA-LION-v3-9B-IT"
+    # "aisingapore/Llama-SEA-LION-v3.5-70B-R"
+    # "aisingapore/Llama-SEA-LION-v3-70B-IT"
+
+    url_sealion = f'https://api.telegram.org/bot{TELEGRAM_SEALION_API_KEY}/'
+    
+    data = request.get_json()  # Parse JSON payload
+    message = data.get('message')
+    
+    chat_id = message['chat']['id']
+    message_text = message.get('text', '')
+
+    if message_text.lower() == '/start':
+        requests.get(url_sealion + f'sendMessage?chat_id={chat_id}&text={"Ask me a question: (or type quit)"}')
+        return 'OK', 200
+    elif message_text.lower() == "/quit":
+        requests.get(url_sealion + f'sendMessage?chat_id={chat_id}&text=Good%20Bye!')
+        return 'OK', 200
+    else:
+        # trigger Sea-Lion API
+        client = OpenAI(
+            api_key=os.environ['sea_lion_api'],
+            base_url="https://api.sea-lion.ai/v1" 
+        )
+
+        completion = client.chat.completions.create(
+            model="aisingapore/Gemma-SEA-LION-v3-9B-IT",
+            messages=[
+                {
+                    "role": "user",
+                    "content": message_text
+                }
+            ]
+        )
+
+        # show "typing..."
+        send_action = url_sealion + f'sendChatAction?chat_id={chat_id}&action=typing'
+        requests.get(send_action)
+
+        r = completion.choices[0].message.content
+        send_url = url_sealion + f'sendMessage?parse_mode=markdown&chat_id={chat_id}&text={r}'
+        requests.get(send_url)
+
+        requests.get(url_sealion + f'sendMessage?parse_mode=markdown&chat_id={chat_id}&text=Ask another question or /quit to end.')
+
+        return 'OK', 200
+
 
 @app.route('/paynow', methods=['GET', 'POST'])
 def paynow():
@@ -243,5 +301,5 @@ def prediction():
     return 'ok'
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True, port="8000")
     # app.run()
