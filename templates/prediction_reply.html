@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>DBS Share Price Prediction</title>
+</head>
+<body style="display:flex; flex-direction: column; gap: 3rem;">
+    <div class="container">
+        <h2>Predicted DBS share price : {{r}}</h2>
+        <form action="{{ url_for('prediction') }}" method="post">
+            <input type="submit" value="Prediction" style="background-color: #109849;">
+        </form>
+        
+        <form action="/" method="post">
+            <input type="submit" value="Main">
+        </form>
+    </div>
+
+</body>
+</html>
+</body>

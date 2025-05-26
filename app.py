@@ -298,8 +298,20 @@ def telegram():
 
 @app.route('/prediction', methods=['GET', 'POST'])
 def prediction():
-    return 'ok'
+    return render_template("prediction.html")
 
+@app.route('/prediction_reply', methods=['POST'])
+def prediction_reply():
+    # from linear regression model
+    coefficient = -50.6
+    y_intercept = 90.2
+
+    if 'q' in request.form:
+        q = float(request.form.get("q"))
+        return(render_template("prediction_reply.html", r=(q * coefficient) + y_intercept))
+    else:
+        return redirect(url_for('prediction'))
+    
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port="8000")
     # app.run()
