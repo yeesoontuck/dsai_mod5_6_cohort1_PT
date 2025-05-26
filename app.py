@@ -261,6 +261,23 @@ def telegram_sealion_webhook():
             base_url="https://api.sea-lion.ai/v1" 
         )
 
+        # In the context of Python and the OpenAI API, the terms "system" and "developer" roles refer to how you instruct the model to behave, 
+        # not to distinct roles within the OpenAI organization. The "system" role is used for providing instructions to the model, 
+        # while the "developer" role is a newer addition that is essentially an equivalent to the system role, particularly for O-series models. 
+        
+        # # https://github.com/openai/openai-python
+        # completion = client.chat.completions.create(
+        #     model="gpt-4o",
+        #     messages=[
+        #         {"role": "developer", "content": "Talk like a pirate."},
+        #         {
+        #             "role": "user",
+        #             "content": "How do I check if a Python object is an instance of a class?",
+        #         },
+        #     ],
+        # )
+
+
         completion = client.chat.completions.create(
             model="aisingapore/Gemma-SEA-LION-v3-9B-IT",
             messages=[

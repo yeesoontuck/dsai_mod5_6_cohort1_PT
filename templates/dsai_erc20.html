@@ -7,7 +7,13 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body style="display: flex; flex-direction: column; gap: 2rem;">
+    <div class="container">
+        <button id="connectButton">Connect to MetaMask</button>
+        <p id="status">Not connected</p>
+        <select id="accountsSelect"></select>
+    </div>
+
     <div class="container">
         <h2>DSAI Token on Sepolia</h2>
 
@@ -16,6 +22,10 @@
         <a href="https://sepolia.etherscan.io/token/0xe72B06D4Cd37285bb489842362fc9939F7BD8336" target="_blank">View Token on Etherscan</a>
 
         <form action="/" method="post">
+            <label for="accounts-select">Choose an account:</label>
+            <select id="accounts-select"></select>
+
+
             Send to: <input type="text" name="payee" id="payee" placeholder="Payee Address" value="0x7F58AAD86E7Fa3158977ee0C50b4245172e6D653" required>
             Amount: <input type="number" min="0" name="amount" id="amount" value="0" required>
 
@@ -39,6 +49,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script>
+        const connectButton = document.getElementById('connectButton');
+        const statusText = document.getElementById('status');
+        const accountsSelect = document.getElementById('accountsSelect');
+
         if (window.ethereum) {
             console.log('Metamask exists in this browser')
         }
@@ -521,7 +535,7 @@
             }
         ];
 
-        const web3 = new Web3(Web3.givenProvider);
+        let web3 = new Web3(Web3.givenProvider);
         // console.log(web3)
 
         const contract = new web3.eth.Contract(contractABI, contractAddress);
@@ -533,6 +547,17 @@
             const accounts = await web3.eth.requestAccounts();
             console.log(accounts);
             // console.log("accounts[0] " + accounts[0]);
+
+            const select = document.getElementById('accounts-select');
+            select.innerHTML = ''; // Clear any existing options
+
+            accounts.forEach(account => {
+                const option = document.createElement('option');
+                option.value = account;
+                option.textContent = account;
+                select.appendChild(option);
+            });
+
 
             // the connected MetaMask account is the sender
             const payee = document.getElementById('payee').value;
@@ -549,15 +574,75 @@
         }
 
         async function token_name() {
-            const result = await contract.methods.name().call();
-            console.log(result);
-            alert("This token name is: " + result);
+            try {
+                const result = await contract.methods.name().call();
+                console.log(result);
+                alert("This token name is: " + result);
+            } catch (error) {
+                console.error("Failed to fetch token name:", error);
+                alert("Error: could not get token name");
+            }
         }
         async function decimals() {
             const result = await contract.methods.decimals().call();
             console.log(result);
             alert("This token has " + result + " decimal places");
         }
+
+
+
+
+
+
+        async function connectMetaMask() {
+            if (window.ethereum) {
+            try {
+                // Request account access
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                // Create Web3 instance
+                web3 = new Web3(window.ethereum);
+
+                statusText.textContent = 'Connected: ' + accounts[0];
+
+                // Fill dropdown
+                accountsSelect.innerHTML = '';
+                accounts.forEach(account => {
+                    const option = document.createElement('option');
+                    option.value = account;
+                    option.textContent = account;
+                    accountsSelect.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error('User denied access', error);
+                statusText.textContent = 'Connection failed';
+            }
+            } else {
+            alert('MetaMask not detected. Please install MetaMask.');
+            }
+        }
+
+        connectButton.addEventListener('click', connectMetaMask);
+
+        // Optional: check on page load if already connected
+        window.addEventListener('load', async () => {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                    statusText.textContent = 'Already connected: ' + accounts[0];
+
+                    accounts.forEach(account => {
+                    const option = document.createElement('option');
+                    option.value = account;
+                    option.textContent = account;
+                    accountsSelect.appendChild(option);
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>

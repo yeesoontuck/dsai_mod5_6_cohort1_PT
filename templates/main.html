@@ -30,6 +30,10 @@
             <input type="submit" value="Transfer money" style="background-color: #109849;">
         </form>
 
+        <form action="{{ url_for('dsai_token') }}" method="post">
+            <input type="submit" value="DSAI ERC20 Token" style="background-color: #109849;">
+        </form>
+
         <form action="{{ url_for('telegram') }}" method="post">
             <input type="submit" value="Start Telegram" style="background-color: #109849;">
         </form>
@@ -37,6 +41,8 @@
         <form action="{{ url_for('prediction') }}" method="post">
             <input type="submit" value="Prediction" style="background-color: #109849;">
         </form>
+
+        <a href="http://t.me/webhook_yst_bot" target="_blank">Telegram bot (Webhook version)</a>
     </div>
 </body>
 </html>
