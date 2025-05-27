@@ -57,3 +57,23 @@ def telegram_setwebhook(bot_name, url):
             raise Exception('Error while setting webhook info')
     except Exception as e:
         print('Error while setting webhook info', e)
+
+def telegram_deletewebhook(bot_name):
+    if bot_name == 'gemini_bot':
+        BOT_KEY = TELEGRAM_API_KEY
+    elif bot_name == 'sealion_bot':
+        BOT_KEY = TELEGRAM_SEALION_API_KEY
+
+    if bot_name == 'gemini_bot':
+        BOT_KEY = TELEGRAM_API_KEY
+    elif bot_name == 'sealion_bot':
+        BOT_KEY = TELEGRAM_SEALION_API_KEY
+    
+    try:
+        # delete webhook setting
+        response = requests.get(f'https://api.telegram.org/bot{BOT_KEY}/deleteWebhook?drop_pending_updates=True')
+
+        if response.status_code != 200:
+            raise Exception('Error while deleting webhook')
+    except Exception as e:
+        print('Error while deleting webhook', e)

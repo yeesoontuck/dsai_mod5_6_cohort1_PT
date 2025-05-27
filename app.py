@@ -17,7 +17,7 @@ from datetime import datetime
 import sqlite3
 from openai import OpenAI
 
-from modules.telegram import telegram_getwebhookino, telegram_setwebhook
+from modules.telegram import telegram_getwebhookino, telegram_setwebhook, telegram_deletewebhook
 
 # Gemini Telegram chat
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
@@ -355,20 +355,7 @@ def settings_telegram_set_webhook_save():
 @app.route('/settings/telegram/delete_webhook', methods=['POST'])
 def settings_telegram_delete():
     bot_name = request.form.get('bot_name')
-    if bot_name == 'gemini_bot':
-        BOT_KEY = TELEGRAM_API_KEY
-    elif bot_name == 'sealion_bot':
-        BOT_KEY = TELEGRAM_SEALION_API_KEY
-    
-    try:
-        # read current webhook settings for Gemini bot
-        response = requests.get(f'https://api.telegram.org/bot{BOT_KEY}/deleteWebhook?drop_pending_updates=True')
-
-        if response.status_code != 200:
-            raise Exception('Error while deleting webhook')
-    except Exception as e:
-        print('Error while deleting webhook', e)
-
+    telegram_deletewebhook(bot_name)
     return redirect(url_for('settings_telegram'))
     
 
