@@ -1,0 +1,27 @@
+{% extends "experimental/layouts/template.html" %}
+{% block title %}Telegram bot settings{% endblock %}
+
+{% block content %}
+    <div class="max-w-xl">
+        <h2 class="text-4xl font-extrabold dark:text-white mb-3">Telegram bot settings</h2>
+
+        <div class="my-3 border-b">
+            <h4 class="text-xl font-bold dark:text-white mb-3">{{ bot_name }} set webhook</h4>
+
+            <div class="my-2">
+                <form action="{{ url_for('settings_telegram_set_webhook_save') }}" method="post" class="inline">
+                    <input type="hidden" name="bot_name" value="{{ bot_name }}">
+
+                    <div class="mb-3">
+                        <label for="q" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Webhook URL</label>
+                        <input type="text" id="url" name="url" value="{{ webhook_info.url }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="https://dsai.spruecutters.com/experimental/telegram/webhook" required autofocus>
+                    </div>
+
+                    <input type="submit" value="Save" class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <a href="{{ url_for('settings_telegram') }}" class="inline-block px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

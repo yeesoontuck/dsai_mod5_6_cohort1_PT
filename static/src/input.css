@@ -8,10 +8,6 @@ ol {
     @apply list-inside list-decimal;
 }
 
-ul {
-    @apply list-inside list-disc;
-}
-
 strong {
     @apply font-bold;
 }
