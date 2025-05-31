@@ -4,7 +4,7 @@ import requests
 TELEGRAM_API_KEY = os.getenv('TELEGRAM_API_KEY')
 TELEGRAM_SEALION_API_KEY = os.getenv('TELEGRAM_SEALION_API_KEY')
 
-def telegram_getwebhookino(bot_name):
+def telegram_getwebhookinfo(bot_name):
 
     if bot_name == 'gemini_bot':
         BOT_KEY = TELEGRAM_API_KEY

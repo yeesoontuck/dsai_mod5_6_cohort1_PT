@@ -1,34 +1,40 @@
-from flask import Flask, request, render_template, redirect, url_for
-import google.generativeai as genai
-from markdown2 import Markdown
-from dotenv import load_dotenv
-load_dotenv()
+# === Standard Library ===
 import os
-
-from google import genai as genai_new
-from google.genai import types
-
-from PIL import Image
-from io import BytesIO
 import time
-import requests
+import sqlite3
+from io import BytesIO
 from datetime import datetime
 
-import sqlite3
+# === Third-Party Packages ===
+from flask import Flask, request, render_template, redirect, url_for
+from dotenv import load_dotenv
+import requests
+from PIL import Image
+from markdown2 import Markdown
+import google.generativeai as genai
+from google.genai import types
+from google import genai as genai_new
 from openai import OpenAI
 
-from modules.telegram import telegram_getwebhookino, telegram_setwebhook, telegram_deletewebhook
+# === Local Modules ===
+from modules.telegram import telegram_getwebhookinfo, telegram_setwebhook, telegram_deletewebhook
+from modules.users import UserDB
 
-# Gemini Telegram chat
+# === Environment Setup ===
+load_dotenv()
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 TELEGRAM_API_KEY = os.getenv('TELEGRAM_API_KEY')
 TELEGRAM_SEALION_API_KEY = os.getenv('TELEGRAM_SEALION_API_KEY')
+
+# === Database Instance ===
+db = UserDB()
+
+# Gemini Telegram chat
 client = genai_new.Client(api_key=GEMINI_API_KEY)
 url = f'https://api.telegram.org/bot{TELEGRAM_API_KEY}/'
-
-
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-2.0-flash")
+
 
 app = Flask(__name__)
 
@@ -335,14 +341,14 @@ def prediction_reply():
 
 @app.route('/settings/telegram', methods=['GET'])
 def settings_telegram():
-    gemini_webhook_info = telegram_getwebhookino('gemini_bot')
-    sealion_webhook_info = telegram_getwebhookino('sealion_bot')
+    gemini_webhook_info = telegram_getwebhookinfo('gemini_bot')
+    sealion_webhook_info = telegram_getwebhookinfo('sealion_bot')
     return render_template('experimental/settings/telegram.html', gemini_webhook_info=gemini_webhook_info, sealion_webhook_info=sealion_webhook_info)
 
 
 @app.route('/settings/telegram/<bot_name>/set_webhook', methods=['GET'])
 def settings_telegram_set_webhook(bot_name):
-    webhook_info = telegram_getwebhookino(bot_name)
+    webhook_info = telegram_getwebhookinfo(bot_name)
     return render_template('experimental/settings/telegram_setwebhook.html', bot_name=bot_name, webhook_info=webhook_info)
 
 @app.route('/settings/telegram/set_webhook', methods=['POST'])
@@ -358,7 +364,58 @@ def settings_telegram_delete():
     telegram_deletewebhook(bot_name)
     return redirect(url_for('settings_telegram'))
     
+@app.route('/experimental/users', methods=['GET', 'POST'])
+def users1():
+    # read all users
+    rows = db.read_users()
+    return render_template('experimental/users.html', users=rows)
+
+@app.route('/experimental/delete_users', methods=['POST'])
+def delete_user1():
+    # delete user
+    name = request.form.get('name')
+    timestamp = request.form.get('timestamp')
+
+    db.delete_user(name, timestamp)
+    return redirect(url_for('users1'))
+
+@app.route('/experimental/edit', methods=['POST'])
+def edit_user1():
+    name = request.form.get('name')
+    timestamp = request.form.get('timestamp')
+
+    # find user in DB
+    row = db.read_user(name, timestamp)
+    return render_template('experimental/user_edit.html', user=row)
+
+@app.route('/experimental/update', methods=['POST'])
+def update_user1():
+    # save changes
+    orig_name = request.form.get('orig_name')
+    orig_timestamp = request.form.get('orig_timestamp')
+    username = request.form.get('username')
+    t = datetime.now()
+
+    db.update_user(orig_name, orig_timestamp, username, t)
+
+    return redirect(url_for('users1'))
+
+@app.route('/experimental/prediction', methods=['GET', 'POST'])
+def prediction1():
+    # from linear regression model
+    coefficient = -50.6
+    y_intercept = 90.2
+
+    if 'q' in request.form:
+        q = float(request.form.get("q"))
+        return render_template("experimental/prediction.html", q=q, r=(q * coefficient) + y_intercept)
+    else:
+        return render_template("experimental/prediction.html")
+    
+@app.route('/experimental/dsai_token', methods=['GET', 'POST'])
+def dsai_token1():
+    return render_template('experimental/dsai_erc20.html')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port="8000")
+    app.run(host='0.0.0.0', debug=True, port=8001)
     # app.run()
