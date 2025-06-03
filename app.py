@@ -16,15 +16,15 @@ from google.genai import types
 from google import genai as genai_new
 from openai import OpenAI
 
-# === Local Modules ===
-from modules.telegram import telegram_getwebhookinfo, telegram_setwebhook, telegram_deletewebhook
-from modules.users import UserDB
-
 # === Environment Setup ===
-load_dotenv()
+load_dotenv() # MUST BE LOADED before importing modules!!!
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 TELEGRAM_API_KEY = os.getenv('TELEGRAM_API_KEY')
 TELEGRAM_SEALION_API_KEY = os.getenv('TELEGRAM_SEALION_API_KEY')
+
+# === Local Modules ===
+from modules.telegram import telegram_getwebhookinfo, telegram_setwebhook, telegram_deletewebhook
+from modules.users import UserDB
 
 # === Database Instance ===
 db = UserDB()
