@@ -10,6 +10,10 @@
 <body>
     <div class="container">
         <h2>Web Application</h2>
+        <form action="{{ url_for('experimental') }}" method="get">
+            <input type="submit" value="Dashboard">
+        </form>
+        
         <form action="{{ url_for('gemini') }}" method="post">
             <input type="submit" value="Chatbot by Gemini">
         </form>
@@ -40,10 +44,6 @@
 
         <form action="https://t.me/webhook_yst_bot" method="get">
             <input type="submit" value="Telegram bot (Webhook version)">
-        </form>
-
-        <form action="{{ url_for('experimental') }}" method="get">
-            <input type="submit" value="Dashboard">
         </form>
     </div>
 </body>
