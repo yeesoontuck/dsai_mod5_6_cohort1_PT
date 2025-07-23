@@ -416,6 +416,10 @@ def prediction1():
 def dsai_token1():
     return render_template('experimental/dsai_erc20.html')
 
+@app.route('/sepia', methods=['GET', 'POST'])
+def sepia():
+    return render_template("sepia_hf.html")
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=8001)
     # app.run()

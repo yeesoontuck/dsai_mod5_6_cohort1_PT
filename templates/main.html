@@ -6,6 +6,7 @@
     <title>Web Application</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
 </head>
 <body>
     <div class="container">
@@ -49,6 +50,11 @@
         <form action="https://huggingface.co/spaces/yeesoontuck/emotion-classifier" method="get">
             <input type="submit" value="Emotion Classifier">
         </form>
+
+        <form action="{{ url_for('sepia') }}" method="get">
+            <input type="submit" value="Sepia tone">
+        </form>
     </div>
+
 </body>
 </html>
